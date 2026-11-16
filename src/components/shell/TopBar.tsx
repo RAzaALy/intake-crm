@@ -1,0 +1,31 @@
+import Link from "next/link";
+import { buttonStyles } from "@/components/ui/Button";
+import { BrandMark } from "./BrandMark";
+import { MainNav } from "./MainNav";
+import { TopBarTitle } from "./TopBarTitle";
+
+/**
+ * Below 1024px. On phones it shows the page title; on tablets the product
+ * name and the nav links, because there is no bottom tab bar there.
+ */
+export function TopBar() {
+  return (
+    <header className="sticky top-0 z-10 flex h-bar items-center gap-4 border-b border-line bg-surface px-4 md:px-8 lg:hidden">
+      <div className="min-w-0 flex-1 md:hidden">
+        <TopBarTitle />
+      </div>
+      <div className="hidden items-center gap-6 md:flex md:flex-1">
+        <BrandMark />
+        <MainNav variant="topbar" />
+      </div>
+      <Link
+        href="/contacts/new"
+        aria-label="New contact"
+        className={buttonStyles({ size: "sm" })}
+      >
+        <span className="md:hidden">New</span>
+        <span className="hidden md:inline">New contact</span>
+      </Link>
+    </header>
+  );
+}
