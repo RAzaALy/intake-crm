@@ -1,8 +1,7 @@
-import Link from "next/link";
-import { buttonStyles } from "@/components/ui/Button";
 import { BrandMark } from "./BrandMark";
 import { FailureIndicator } from "./FailureIndicator";
 import { MainNav } from "./MainNav";
+import { NewContactLink } from "./NewContactLink";
 import { TopBarTitle } from "./TopBarTitle";
 
 /**
@@ -23,14 +22,7 @@ export function TopBar() {
         </div>
         <MainNav variant="topbar" />
       </div>
-      <Link
-        href="/contacts/new"
-        aria-label="New contact"
-        className={buttonStyles({ size: "sm" })}
-      >
-        <span className="md:hidden">New</span>
-        <span className="hidden md:inline">New contact</span>
-      </Link>
+      <NewContactLink placement="topbar" />
     </header>
   );
 }

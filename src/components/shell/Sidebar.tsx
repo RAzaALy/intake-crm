@@ -1,9 +1,8 @@
-import Link from "next/link";
-import { buttonStyles } from "@/components/ui/Button";
 import { BrandMark } from "./BrandMark";
 import { DemoSwitch } from "./DemoSwitch";
 import { FailureIndicator } from "./FailureIndicator";
 import { MainNav } from "./MainNav";
+import { NewContactLink } from "./NewContactLink";
 
 /** Desktop only (1024px and up). */
 export function Sidebar() {
@@ -14,9 +13,7 @@ export function Sidebar() {
         <FailureIndicator />
       </div>
       <MainNav variant="sidebar" />
-      <Link href="/contacts/new" className={buttonStyles({ className: "w-full" })}>
-        New contact
-      </Link>
+      <NewContactLink placement="sidebar" />
       <footer className="mt-auto border-t border-line px-3 pt-4">
         <DemoSwitch />
       </footer>

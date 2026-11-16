@@ -26,6 +26,13 @@ export const SOURCE_LABELS: Record<Source, string> = {
   walk_in: "Walk-in",
 };
 
+/** Option text in the form's conflict check select (conflict.*). */
+export const CONFLICT_LABELS: Record<ConflictCheck, string> = {
+  pending: "Pending",
+  cleared: "Cleared",
+  flagged: "Flagged",
+};
+
 /** Badge text says what it is about, so "Pending" alone is never ambiguous in a row. */
 export const CONFLICT_BADGE_LABELS: Record<ConflictCheck, string> = {
   pending: "Conflict check pending",

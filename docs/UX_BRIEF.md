@@ -290,6 +290,7 @@ Conventions: sentence case; full stops on sentences, none on labels and buttons;
 | details.loading.sr | Details | Loading contact… |
 | form.new.title | Form | New contact |
 | form.edit.title | Form | Edit {name} |
+| form.edit.title.static | Form (edit loading or load failed) | Edit contact |
 | form.section.person | Form | Prospective client |
 | form.section.matter | Form | Matter and routing |
 | form.label.fullName | Form | Full name |
