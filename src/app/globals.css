@@ -66,6 +66,10 @@
 
   --color-accent: var(--brass-700);
 
+  /* Demo-mode notice. Same amber as Lead today, but its own meaning, so either can change alone. */
+  --color-notice-text: var(--amber-800);
+  --color-notice-bg: var(--amber-50);
+
   --color-status-lead-text: var(--amber-800);
   --color-status-lead-bg: var(--amber-50);
   --color-status-active-text: var(--blue-700);
