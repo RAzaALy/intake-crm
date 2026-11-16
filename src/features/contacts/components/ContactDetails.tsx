@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { ErrorState } from "@/components/ui/ErrorState";
+import { Notes } from "@/features/activity/components/Notes";
+import { Timeline } from "@/features/activity/components/Timeline";
 import { useFailureSimulated } from "@/lib/useFailureSimulated";
 import { useContact } from "../api/queries";
 import { ContactDetailsHeader } from "./ContactDetailsHeader";
@@ -43,7 +45,7 @@ export function ContactDetails() {
 
   if (data === null) return <ContactNotFound />;
 
-  const { contact } = data;
+  const { contact, notes, activities } = data;
   // One clock per render, so every relative time on the page agrees on "now".
   const now = new Date();
 
@@ -53,9 +55,11 @@ export function ContactDetails() {
       {/* DOM order is the phone order (Notes, Details, Activity). From 1024px Details moves
           to a right-hand column spanning both rows. */}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
+        <Notes contactId={contact.id} notes={notes} now={now} />
         <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
           <DetailsPanel contact={contact} now={now} />
         </div>
+        <Timeline activities={activities} now={now} />
       </div>
     </div>
   );
