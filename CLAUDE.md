@@ -61,7 +61,7 @@ src/
 
 ### State rules
 - Server state: TanStack Query only. No copying query data into `useState`.
-- List state (search, status, sort): URL search params. Read with `useSearchParams`, write with `router.replace`.
+- List state (search, status, sort): URL search params. Read with `useSearchParams`, write with `window.history.replaceState` (Next.js syncs it into `useSearchParams` at once, with no server round-trip, so the URL never lags the search box).
 - Form state: React Hook Form.
 - No global store. No Context except providers.
 

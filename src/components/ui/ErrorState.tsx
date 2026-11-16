@@ -9,9 +9,11 @@ type ErrorStateProps = {
   onRetry: () => void;
   /** Extra line, such as the "Simulate API failure is on" hint. */
   note?: string;
+  /** True while a retry runs. The panel stays put, so keyboard focus stays on the button. */
+  retrying?: boolean;
 };
 
-export function ErrorState({ title, body, retryLabel, onRetry, note }: ErrorStateProps) {
+export function ErrorState({ title, body, retryLabel, onRetry, note, retrying = false }: ErrorStateProps) {
   return (
     <section className="flex flex-col items-start gap-3 rounded-panel border border-line bg-surface p-6">
       <div className="flex items-start gap-2">
@@ -23,8 +25,8 @@ export function ErrorState({ title, body, retryLabel, onRetry, note }: ErrorStat
           {note && <p className="max-w-[70ch] text-body text-ink-muted">{note}</p>}
         </div>
       </div>
-      <Button variant="secondary" onClick={onRetry}>
-        {retryLabel}
+      <Button variant="secondary" onClick={onRetry} loading={retrying}>
+        {retrying ? "Loading…" : retryLabel}
       </Button>
     </section>
   );

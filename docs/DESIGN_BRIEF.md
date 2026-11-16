@@ -81,7 +81,7 @@ Secondary button = white surface, `--color-line-input` border, ink text. There i
 - Desktop (≥ 1024px): left sidebar 224px (product name, Contacts, Pipeline, "New contact" button), content max width 1200px, 32px page padding.
 - Tablet (768 to 1023px): collapsed sidebar or top bar.
 - Mobile (< 768px): top bar with page title and "New" action, bottom tab bar (Contacts, Pipeline), 16px gutters, touch targets 44px minimum, no horizontal page scroll (only the pipeline scrolls sideways, on purpose).
-- Table rows 48px high on desktop. Row hover uses `--color-sunken`.
+- Table rows 48px high on desktop, about 56px when a secondary line (such as email) is stacked under the name. Row hover uses `--color-sunken`.
 
 ## Components (the small design system)
 Button (primary, secondary, ghost, danger; sm and md; loading state), Badge (status, conflict), Input, Textarea, Select, Field (label + hint + error, wires `aria-describedby` and `aria-invalid`), Skeleton, EmptyState, ErrorState, Avatar (initials only, colour from name hash within a muted set), PageHeader, Toolbar.

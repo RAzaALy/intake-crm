@@ -46,7 +46,7 @@ Contacts                                              (h1, serif 28)
 ```
 Rows 48px, hover `--color-sunken`. Whole row is clickable via a stretched link on the name, so each row is one tab stop.
 
-**Mobile:** search full width (16px text), chips scroll horizontally in one row, sort select below. Cards (not table): name + status badge on line 1, email on line 2, matter, attorney and conflict as labelled meta (`list.card.*`), last activity at the bottom. Whole card is the link, min height 72px.
+**Mobile:** search full width (16px text), chips scroll horizontally in one row, sort select below. Cards (not table), four short lines so about four fit on screen: name + status badge; email; matter · attorney in muted 13px; conflict badge on the left and last activity (with the stale hint) on the right. The `list.card.*` labels are screen-reader only. Whole card is the link.
 
 **Interactions**
 - `/` focuses search, `n` opens New contact (both ignored while typing in a field).
@@ -198,6 +198,7 @@ Conventions: sentence case; full stops on sentences, none on labels and buttons;
 | list.filter.all | List | All |
 | list.filter.chip | List | {status} {count} (count in muted tabular numerals) |
 | list.filter.chip.sr | List | {status}, {count} contacts |
+| list.filter.chip.sr.one | List | {status}, 1 contact |
 | list.sort.label | List | Sort by |
 | list.sort.lastActivity | List | Last activity |
 | list.sort.name | List | Name A to Z |
