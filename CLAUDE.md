@@ -90,6 +90,7 @@ src/
 2. After coding a slice, run: `npm run lint && npm run typecheck && npm test && npm run build`. Report results honestly. Do not say "done" if anything fails.
 3. Then give a short **walkthrough**: what each changed file does, and one decision Raza may be asked about.
 4. **Do not commit until Raza says "commit".** Suggest small commits in Conventional Commits style (`feat(contacts): ...`). On "commit", make them in order and push.
+   **Raza is the only author.** Never add `Co-Authored-By`, "Generated with Claude" or any other Claude attribution to commit messages or PR descriptions. Plain Conventional Commit messages only.
 5. Never add a dependency, change the folder structure, or rename public APIs without asking.
 6. If a requirement is unclear, ask one short question instead of guessing.
 
