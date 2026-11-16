@@ -219,7 +219,7 @@ Conventions: sentence case; full stops on sentences, none on labels and buttons;
 | list.announce | List (live region) | {count} contacts found |
 | list.announce.one | List (live region) | 1 contact found |
 | list.announce.none | List (live region) | No contacts found |
-| list.stale | List, pipeline | No contact in {n} days |
+| list.stale | List, details, pipeline | No contact in {n} days |
 | list.empty.title | List | No contacts yet |
 | list.empty.body | List | New inquiries you add will appear here. |
 | list.empty.action | List | New contact |

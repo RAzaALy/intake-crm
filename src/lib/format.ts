@@ -14,3 +14,8 @@ export function formatRelativeTime(iso: string, now: Date): string {
 export function formatExactTime(iso: string): string {
   return format(new Date(iso), "d MMM yyyy, h:mm aaa");
 }
+
+/** "12 Nov 2026", for dates where the time of day does not matter (details.label.added). */
+export function formatShortDate(iso: string): string {
+  return format(new Date(iso), "d MMM yyyy");
+}
