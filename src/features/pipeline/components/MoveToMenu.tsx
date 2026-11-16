@@ -8,7 +8,7 @@ import { cn } from "@/lib/cn";
 type MoveToMenuProps = {
   contact: Contact;
   onMove: (contact: Contact, to: ContactStatus) => void;
-  /** True right after a menu move: the card has a new parent, so this is a fresh button to focus. */
+  /** True right after a menu move or keyboard drop: the card has a new parent, so this is a fresh button to focus. */
   autoFocus: boolean;
 };
 

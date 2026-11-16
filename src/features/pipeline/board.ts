@@ -35,7 +35,16 @@ export function movedMessage(contact: Contact, to: ContactStatus): string {
   return `${contact.fullName} moved to ${STATUS_LABELS[to]}.`;
 }
 
-/** Takes the contact as it was before the move, so contact.status is where it came from. */
+// The messages below take the contact as it was before the move, so contact.status is where it came from.
+
 export function moveFailedMessage(contact: Contact): string {
   return `Couldn't move ${contact.fullName}. The card is back in ${STATUS_LABELS[contact.status]}. Try again.`;
+}
+
+export function undoneMessage(contact: Contact): string {
+  return `Move undone. ${contact.fullName} is back in ${STATUS_LABELS[contact.status]}.`;
+}
+
+export function undoFailedMessage(contact: Contact, movedTo: ContactStatus): string {
+  return `Couldn't undo the move. ${contact.fullName} is still in ${STATUS_LABELS[movedTo]}.`;
 }

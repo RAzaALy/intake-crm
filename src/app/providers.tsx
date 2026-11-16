@@ -34,7 +34,9 @@ export function Providers({ children }: { children: ReactNode }) {
           classNames: {
             toast:
               "bg-surface! text-ink! border-line! rounded-panel! shadow-float! font-sans! text-body!",
-            actionButton: "bg-primary! text-on-primary! rounded-control!",
+            // 44px tall on phones: Undo is how a mistaken move gets fixed there.
+            actionButton:
+              "bg-primary! text-on-primary! rounded-control! h-11! px-3! md:h-6! md:px-2!",
           },
         }}
       />

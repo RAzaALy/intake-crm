@@ -1,5 +1,7 @@
+import { useDroppable } from "@dnd-kit/core";
 import { STATUS_LABELS } from "@/features/contacts/labels";
 import type { Contact, ContactStatus } from "@/features/contacts/schema";
+import { cn } from "@/lib/cn";
 import { columnHeadingLabel } from "../board";
 import { PipelineCard } from "./PipelineCard";
 
@@ -20,13 +22,22 @@ type ColumnProps = {
 /** 85% wide on phones so the next column peeks in and invites a swipe; a grid cell from 768px. */
 export function Column({ status, contacts, now, onMove, focusId }: ColumnProps) {
   const headingId = `pipeline-column-${status}`;
+  // The whole column is the drop target, not just its cards, so an empty column still takes a drop.
+  const { setNodeRef, isOver, active } = useDroppable({ id: status });
+  // Dropping a card back where it came from does nothing, so its own column does not light up.
+  const isTarget = isOver && !contacts.some((contact) => contact.id === active?.id);
 
   return (
     // relative: the sr-only text inside is absolutely positioned. Without a positioned column it
     // escapes the board's sideways scroll and widens the whole page on phones.
     <section
+      ref={setNodeRef}
       aria-labelledby={headingId}
-      className="relative flex w-[85%] shrink-0 snap-start flex-col gap-3 rounded-panel bg-sunken p-3 md:w-auto"
+      className={cn(
+        "relative flex w-[85%] shrink-0 snap-start flex-col gap-3 rounded-panel bg-sunken p-3 md:w-auto",
+        "outline-2 -outline-offset-2 outline-transparent transition-[outline-color] duration-150 ease-out",
+        isTarget && "outline-primary",
+      )}
     >
       <h2 id={headingId} className="px-1 text-base font-semibold text-ink">
         <span aria-hidden="true">

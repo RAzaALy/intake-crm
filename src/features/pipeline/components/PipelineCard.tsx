@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { useDraggable } from "@dnd-kit/core";
+import { GripVertical } from "lucide-react";
 import { ConflictBadge } from "@/features/contacts/components/ConflictBadge";
 import { LastActivity } from "@/features/contacts/components/LastActivity";
 import { MATTER_LABELS, UNASSIGNED_LABEL } from "@/features/contacts/labels";
 import type { Contact, ContactStatus } from "@/features/contacts/schema";
+import { cn } from "@/lib/cn";
 import { MoveToMenu } from "./MoveToMenu";
 
 type PipelineCardProps = {
@@ -15,15 +18,48 @@ type PipelineCardProps = {
 /**
  * Name first, then the reference line, then what needs attention: a conflict that is not
  * cleared, and the stale hint on quiet leads. Cleared conflicts are left off to keep cards short.
+ *
+ * Drag: the mouse can grab the card anywhere. The keyboard picks it up only from the grip
+ * button (the "activator"), so the card itself is not a button wrapped around a link and a menu.
  */
 export function PipelineCard({ contact, now, onMove, focusMoveButton }: PipelineCardProps) {
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging } =
+    useDraggable({ id: contact.id });
+
   return (
-    <article className="flex flex-col gap-2 rounded-panel border border-line bg-surface p-3">
-      <h3 className="text-body font-semibold text-ink">
-        <Link href={`/contacts/${contact.id}`} className="rounded-control hover:underline">
-          {contact.fullName}
-        </Link>
-      </h3>
+    <article
+      ref={setNodeRef}
+      {...listeners}
+      style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
+      className={cn(
+        "relative flex flex-col gap-2 rounded-panel border border-line bg-surface p-3 md:cursor-grab",
+        isDragging && "z-10 shadow-float md:cursor-grabbing",
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-body font-semibold text-ink">
+          <Link
+            href={`/contacts/${contact.id}`}
+            // The name is a link, not a drag handle. A drag that started here would end with a
+            // click on the link that dnd-kit swallows before Next sees it, so the browser does a
+            // full page load and the move is lost. (The Move button is safe: Radix cancels its mousedown.)
+            onMouseDown={(event) => event.stopPropagation()}
+            className="rounded-control hover:underline"
+          >
+            {contact.fullName}
+          </Link>
+        </h3>
+        {/* Hidden on phones: touch never drags there (scrolling wins), the Move menu does the job. */}
+        <button
+          ref={setActivatorNodeRef}
+          type="button"
+          {...attributes}
+          aria-label={`Drag ${contact.fullName}`}
+          className="-my-1 -mr-1 hidden size-7 shrink-0 items-center justify-center rounded-control text-ink-faint hover:bg-sunken hover:text-ink md:inline-flex"
+        >
+          <GripVertical size={16} aria-hidden="true" />
+        </button>
+      </div>
 
       <p className="-mt-1 text-secondary text-ink-muted">
         <span className="sr-only">Matter: </span>

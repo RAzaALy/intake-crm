@@ -1,11 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import {
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type UniqueIdentifier,
+} from "@dnd-kit/core";
 import { ErrorState } from "@/components/ui/ErrorState";
 import { useContacts } from "@/features/contacts/api/queries";
 import { CONTACT_STATUSES, type Contact, type ContactStatus } from "@/features/contacts/schema";
 import { useFailureSimulated } from "@/lib/useFailureSimulated";
 import { groupByStatus } from "../board";
+import {
+  buildAnnouncements,
+  columnCollision,
+  columnKeyboardCoordinates,
+  screenReaderInstructions,
+  statusFromDroppable,
+} from "../dnd";
 import { usePipelineMove } from "../usePipelineMove";
 import { Column } from "./Column";
 import { PipelineSkeleton } from "./PipelineSkeleton";
@@ -15,8 +31,15 @@ export function Board() {
   const { data: contacts, isPending, isFetching, refetch } = useContacts();
   const failureSimulated = useFailureSimulated();
   const move = usePipelineMove();
-  // The card whose Move button gets focus after a menu move lands it in its new column.
+  // The card whose Move button gets focus after a menu move or keyboard drop lands it in its new column.
   const [focusId, setFocusId] = useState<string | null>(null);
+
+  // Mouse and keyboard only. No touch sensor, so on a phone a swipe always scrolls the board.
+  // The 8px distance lets a click on the name or the Move button stay a click.
+  const sensors = useSensors(
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: columnKeyboardCoordinates }),
+  );
 
   if (isPending) return <PipelineSkeleton />;
 
@@ -39,8 +62,20 @@ export function Board() {
     );
   }
 
+  const findContact = (id: UniqueIdentifier) => contacts.find((contact) => contact.id === id);
+
   function handleMenuMove(contact: Contact, to: ContactStatus) {
     setFocusId(contact.id);
+    move(contact, to);
+  }
+
+  function handleDragEnd({ active, over, activatorEvent }: DragEndEvent) {
+    const contact = findContact(active.id);
+    const to = statusFromDroppable(over?.id);
+    if (!contact || !to || to === contact.status) return;
+    // dnd-kit refocuses the grip, but the card remounts in its new column just after that,
+    // so a keyboard drop would leave focus on <body>. Same fix as the menu. Mouse drags leave focus alone.
+    if (activatorEvent instanceof KeyboardEvent) setFocusId(contact.id);
     move(contact, to);
   }
 
@@ -49,7 +84,16 @@ export function Board() {
   const now = new Date();
 
   return (
-    <>
+    <DndContext
+      // A fixed id instead of dnd-kit's counter, so its aria ids stay stable.
+      id="pipeline"
+      sensors={sensors}
+      collisionDetection={columnCollision}
+      accessibility={{ announcements: buildAnnouncements(findContact), screenReaderInstructions }}
+      // Forget the last focus target, or a mouse drag of that card would pull focus to it.
+      onDragStart={() => setFocusId(null)}
+      onDragEnd={handleDragEnd}
+    >
       {/* Phones: one row that scrolls sideways and snaps to a column. 768px up: a three-column grid. */}
       <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:snap-none md:grid-cols-3 md:overflow-visible md:px-0">
         {CONTACT_STATUSES.map((status) => (
@@ -63,6 +107,6 @@ export function Board() {
           />
         ))}
       </div>
-    </>
+    </DndContext>
   );
 }

@@ -125,11 +125,11 @@ Rows 48px, hover `--color-sunken`. Whole row is clickable via a stretched link o
 - Drag and drop with dnd-kit (pointer and keyboard sensors). Drag handle is the whole card except the name link and Move button.
 - Move menu: `pipeline.card.menu.item` for the two other statuses.
 - Every move is optimistic, then toast `toast.move.moved` (or `toast.move.flagged` for flagged conflict to Active) with `toast.move.undo`. Failure rolls back and shows `toast.move.failed`.
-- After a move by menu, focus goes to the moved card's Move button in its new column, so keyboard users are not dropped at the top of the page.
+- After a move by menu, focus goes to the moved card's Move button in its new column, so keyboard users are not dropped at the top of the page. The same after a keyboard drop. On phones, focus moves without scrolling, so the board stays on the column being worked through.
 
 **States**
 - Loading: 3 skeleton columns with 3, 2, 1 skeleton cards; sr `pipeline.loading.sr`.
-- Empty column: `pipeline.column.empty.{status}` + `pipeline.column.empty.hint`, inside a dashed `--color-line` drop area.
+- Empty column: `pipeline.column.empty.{status}` + `pipeline.column.empty.hint`, inside a dashed `--color-line-input` drop area (`--color-line` disappears on `--color-sunken`).
 - Error: `pipeline.error.*`. Move failed: toast.
 
 **A11y:** h1 Pipeline, h2 per column with `pipeline.column.heading.sr`. Each column is a `<section aria-labelledby>`, cards in a `<ul>`. dnd-kit `accessibility.screenReaderInstructions` and `announcements` use the `pipeline.dnd.*` keys. Status is never shown by colour alone: column headings name the status.
