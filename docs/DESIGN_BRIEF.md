@@ -66,6 +66,7 @@ Warm neutrals with one deep green. Status colours carry meaning and always come 
 | Conflict pending | text `#5F5A52`, bg `#F3F1ED` | Neutral | 6.1:1 |
 | Conflict cleared | text `#5F5A52`, no bg, check icon | Low emphasis | |
 | `--color-danger` | `#B42318` | Errors, destructive | 6.6:1 |
+| `--color-danger-soft` | `#FBE7E5` | Background of the inline "Not saved" alert only | ink on it 14:1 |
 | `--color-notice-text` / `--color-notice-bg` | `#8A5A00` on `#FBF1DC` | "Failure simulation on" indicator only. Same amber as Lead, separate meaning; shown as a 6px rectangle, not a pill | 5.3:1 |
 
 Secondary button = white surface, `--color-line-input` border, ink text. There is no second brand colour: in product UI, "secondary" means quieter, not a different hue.

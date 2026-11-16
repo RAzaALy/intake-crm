@@ -34,6 +34,8 @@ export function buttonStyles({
     "inline-flex shrink-0 items-center justify-center gap-2 rounded-control font-medium whitespace-nowrap",
     "transition-colors duration-150 ease-out",
     "disabled:cursor-not-allowed disabled:opacity-60",
+    // A busy button keeps full colour: "Saving…" is the status the person is waiting on.
+    "aria-busy:cursor-wait aria-busy:opacity-100",
     variantStyles[variant],
     sizeStyles[size],
     className,

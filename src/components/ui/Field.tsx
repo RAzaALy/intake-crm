@@ -21,7 +21,7 @@ export function Field({ label, hint, error, optional = false, children }: FieldP
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
 
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
+  const describedBy = [error ? errorId : null, hint ? hintId : null].filter(Boolean).join(" ");
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -34,14 +34,15 @@ export function Field({ label, hint, error, optional = false, children }: FieldP
         "aria-describedby": describedBy || undefined,
         "aria-invalid": error ? true : undefined,
       })}
-      {hint && (
-        <p id={hintId} className="text-meta text-ink-muted">
-          {hint}
-        </p>
-      )}
+      {/* Error first, so it sits right under the red border and lines up across a grid row. */}
       {error && (
         <p id={errorId} className="text-meta font-medium text-danger">
           {error}
+        </p>
+      )}
+      {hint && (
+        <p id={hintId} className="text-meta text-ink-muted">
+          {hint}
         </p>
       )}
     </div>

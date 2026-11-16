@@ -26,7 +26,7 @@ describe("Field", () => {
     const input = screen.getByLabelText("Email");
     expect(input).toHaveAttribute("aria-invalid", "true");
     expect(input).toHaveAccessibleDescription(
-      "Work or personal. Enter an email like name@firm.com.",
+      "Enter an email like name@firm.com. Work or personal.",
     );
   });
 
