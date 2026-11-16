@@ -1,26 +1,167 @@
 @import "tailwindcss";
 
+/*
+ * Token layers (see docs/DESIGN_BRIEF.md, "How colour works here").
+ * 1. Primitives: raw values with no meaning. Only this file uses them.
+ * 2. Semantic tokens (@theme): what components use, as Tailwind utilities.
+ * 3. Component tokens (@theme, bottom): sizes and roles for specific parts.
+ * Theming = remap layer 2 to other primitives under [data-theme="..."].
+ */
+
+/* 1. Primitives */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --white: #ffffff;
+  --stone-50: #faf9f7;
+  --stone-100: #f3f1ed;
+  --stone-200: #e4e0d9;
+  --stone-400: #958e83;
+  --stone-500: #746d64;
+  --stone-600: #5f5a52;
+  --stone-900: #1f1d1a;
+
+  --green-50: #e3eeeb;
+  --green-800: #1f4e46;
+  --green-900: #173c36;
+
+  --brass-700: #8a6420;
+
+  --amber-50: #fbf1dc;
+  --amber-800: #8a5a00;
+  --blue-50: #e3edf9;
+  --blue-700: #1d5a9e;
+  --grey-100: #ecedee;
+  --grey-600: #55595f;
+  --red-50: #fbe7e5;
+  --red-700: #b42318;
+  --red-800: #9b2c2c;
+
+  /* Avatar tints. Not in the brief's table: a muted set for initials. */
+  --tint-stone: #e8e4dc;
+  --tint-sage: #dde5df;
+  --tint-clay: #ebddd3;
+  --tint-slate: #dce1e6;
+  --tint-sand: #ede5cf;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* 2. Semantic tokens. Replaces Tailwind's default palette entirely. */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-paper: var(--stone-50);
+  --color-surface: var(--white);
+  --color-sunken: var(--stone-100);
+  --color-line: var(--stone-200);
+  --color-line-input: var(--stone-400);
+
+  --color-ink: var(--stone-900);
+  --color-ink-muted: var(--stone-600);
+  --color-ink-faint: var(--stone-500);
+
+  --color-primary: var(--green-800);
+  --color-primary-hover: var(--green-900);
+  --color-primary-soft: var(--green-50);
+  --color-on-primary: var(--white);
+
+  --color-accent: var(--brass-700);
+
+  --color-status-lead-text: var(--amber-800);
+  --color-status-lead-bg: var(--amber-50);
+  --color-status-active-text: var(--blue-700);
+  --color-status-active-bg: var(--blue-50);
+  --color-status-closed-text: var(--grey-600);
+  --color-status-closed-bg: var(--grey-100);
+
+  --color-conflict-flagged-text: var(--red-800);
+  --color-conflict-flagged-bg: var(--red-50);
+  --color-conflict-pending-text: var(--stone-600);
+  --color-conflict-pending-bg: var(--stone-100);
+  --color-conflict-cleared-text: var(--stone-600);
+
+  --color-danger: var(--red-700);
+  --color-danger-soft: var(--red-50);
+
+  --color-avatar-1: var(--tint-stone);
+  --color-avatar-2: var(--tint-sage);
+  --color-avatar-3: var(--tint-clay);
+  --color-avatar-4: var(--tint-slate);
+  --color-avatar-5: var(--tint-sand);
+
+  /* Type: IBM Plex Sans for UI, Source Serif 4 for page titles only. */
+  --font-*: initial;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+
+  --text-*: initial;
+  --text-meta: 12px;
+  --text-meta--line-height: 1.5;
+  --text-secondary: 13px;
+  --text-secondary--line-height: 1.5;
+  --text-body: 14px;
+  --text-body--line-height: 1.5;
+  --text-base: 16px;
+  --text-base--line-height: 1.5;
+  --text-card-title: 20px;
+  --text-card-title--line-height: 1.25;
+  --text-title: 24px;
+  --text-title--line-height: 1.25;
+  --text-title-lg: 28px;
+  --text-title-lg--line-height: 1.25;
+
+  --radius-*: initial;
+  --radius-control: 6px;
+  --radius-panel: 8px;
+
+  --shadow-*: initial;
+  --shadow-float: 0 4px 16px rgb(31 29 26 / 0.12), 0 1px 3px rgb(31 29 26 / 0.08);
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+
+  /* 3. Component tokens */
+  --spacing-sidebar: 224px;
+  --spacing-bar: 56px;
+  --container-content: 1200px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.25;
+  }
+
+  /* One focus style everywhere: 2px primary ring with 2px offset, keyboard only. */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  ::placeholder {
+    color: var(--color-ink-faint);
+    opacity: 1;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
