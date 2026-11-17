@@ -44,7 +44,8 @@ export function PipelineCard({ contact, now, onMove, focusMoveButton }: Pipeline
             // click on the link that dnd-kit swallows before Next sees it, so the browser does a
             // full page load and the move is lost. (The Move button is safe: Radix cancels its mousedown.)
             onMouseDown={(event) => event.stopPropagation()}
-            className="rounded-control hover:underline"
+            // 44px tap area on phones; the negative margin keeps the card the same height.
+            className="rounded-control hover:underline max-md:-my-3 max-md:inline-flex max-md:min-h-11 max-md:items-center"
           >
             {contact.fullName}
           </Link>

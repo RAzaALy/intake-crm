@@ -28,6 +28,7 @@ export function DemoSwitch() {
   return (
     <div className="flex items-start gap-3">
       <button
+        id={`${id}-switch`}
         type="button"
         role="switch"
         aria-checked={on}
@@ -35,7 +36,7 @@ export function DemoSwitch() {
         aria-describedby={`${id}-hint`}
         onClick={handleToggle}
         // 44px tap area on phones around a 20px track.
-        className="-my-3 flex h-11 shrink-0 items-center md:my-0 md:h-5"
+        className="-my-3 flex h-11 min-w-11 shrink-0 items-center md:my-0 md:h-5 md:min-w-0"
       >
         <span
           aria-hidden="true"
@@ -54,9 +55,14 @@ export function DemoSwitch() {
         </span>
       </button>
       <div className="flex flex-col gap-0.5">
-        <span id={`${id}-label`} className="text-secondary font-medium text-ink">
+        {/* A <label> so tapping the text toggles the switch too: a button is labelable. */}
+        <label
+          id={`${id}-label`}
+          htmlFor={`${id}-switch`}
+          className="cursor-pointer text-secondary font-medium text-ink"
+        >
           Simulate API failure
-        </span>
+        </label>
         <span id={`${id}-hint`} className="text-meta text-ink-muted">
           For reviewers: makes every request fail, so you can see the error states.
         </span>
