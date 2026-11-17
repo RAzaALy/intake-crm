@@ -23,17 +23,18 @@ type PipelineCardProps = {
  * button (the "activator"), so the card itself is not a button wrapped around a link and a menu.
  */
 export function PipelineCard({ contact, now, onMove, focusMoveButton }: PipelineCardProps) {
-  const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, isDragging } =
-    useDraggable({ id: contact.id });
+  const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging } = useDraggable({
+    id: contact.id,
+  });
 
   return (
+    // The card stays put during a drag, faded as a placeholder; PipelineCardPreview follows the pointer.
     <article
       ref={setNodeRef}
       {...listeners}
-      style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
       className={cn(
         "relative flex flex-col gap-2 rounded-panel border border-line bg-surface p-3 md:cursor-grab",
-        isDragging && "z-10 shadow-float md:cursor-grabbing",
+        isDragging && "opacity-50",
       )}
     >
       <div className="flex items-start justify-between gap-2">

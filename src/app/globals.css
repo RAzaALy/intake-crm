@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Matches a shell element that holds a page marked data-fill-viewport (contacts, pipeline).
+   From 768px those pages fit the screen and their table or board scrolls inside (see AppShell). */
+@custom-variant fill-page (&:has([data-fill-viewport]));
+
 /*
  * Token layers (see docs/DESIGN_BRIEF.md, "How colour works here").
  * 1. Primitives: raw values with no meaning. Only this file uses them.

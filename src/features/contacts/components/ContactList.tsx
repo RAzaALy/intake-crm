@@ -65,7 +65,8 @@ export function ContactList() {
   const now = new Date();
 
   return (
-    <div className="flex flex-col gap-4">
+    // min-h-0 (here and on the table wrapper): fit the rows, but never grow past the screen.
+    <div className="flex flex-col gap-4 md:min-h-0">
       <ListToolbar
         params={params}
         counts={result.counts}
@@ -78,7 +79,7 @@ export function ContactList() {
         <NoMatches params={params} onClear={() => setParams({ query: "", status: "all" })} />
       ) : (
         <>
-          <div className="hidden md:block">
+          <div className="hidden md:flex md:min-h-0 md:flex-col">
             <ContactTable contacts={result.contacts} sort={params.sort} now={now} />
           </div>
           <div className="md:hidden">

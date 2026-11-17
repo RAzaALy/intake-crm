@@ -3,10 +3,10 @@ import { Skeleton } from "@/components/ui/Skeleton";
 // 3, 2 and 1 cards: uneven like a real queue, so the board does not look full before it loads.
 const CARDS_PER_COLUMN = [3, 2, 1];
 
-/** Same boxes as the board: three sunken columns, a heading, then cards. */
+/** Same boxes as the board: three sunken columns, a heading, then cards. Full height from 768px. */
 export function PipelineSkeleton() {
   return (
-    <div className="-mx-4 flex gap-3 overflow-hidden px-4 md:mx-0 md:grid md:grid-cols-3 md:px-0">
+    <div className="-mx-4 flex gap-3 overflow-hidden px-4 md:mx-0 md:grid md:min-h-0 md:flex-1 md:grid-cols-3 md:grid-rows-1 md:px-0">
       <p role="status" className="sr-only">
         Loading pipeline…
       </p>

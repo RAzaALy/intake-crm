@@ -13,7 +13,10 @@ export function AppShell({ children }: { children: ReactNode }) {
       >
         Skip to main content
       </a>
-      <div className="min-h-dvh lg:flex">
+      {/* fill-page (globals.css): on the list and the board, from 768px, the shell is exactly one
+          screen tall and main hands its height down, so the table or board scrolls instead of the page.
+          Phones keep the normal page scroll: a nested scroller there fights the bottom tabs. */}
+      <div className="min-h-dvh lg:flex md:fill-page:flex md:fill-page:h-dvh">
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <TopBar />
@@ -21,9 +24,11 @@ export function AppShell({ children }: { children: ReactNode }) {
           <main
             id="main"
             tabIndex={-1}
-            className="flex-1 px-4 pt-6 pb-8 outline-none md:px-8 lg:pt-8"
+            className="flex-1 px-4 pt-6 pb-8 outline-none md:px-8 lg:pt-8 md:fill-page:flex md:fill-page:min-h-0 md:fill-page:flex-col md:fill-page:pb-6"
           >
-            <div className="mx-auto w-full max-w-content">{children}</div>
+            <div className="mx-auto w-full max-w-content md:fill-page:flex md:fill-page:min-h-0 md:fill-page:flex-1 md:fill-page:flex-col">
+              {children}
+            </div>
           </main>
           {/* Below 1024px the demo switch ends each page; on desktop it sits in the sidebar.
               A div, not <footer>: a footer landmark holding only a switch is noise for screen readers. */}

@@ -3,11 +3,13 @@
 import { useState } from "react";
 import {
   DndContext,
+  DragOverlay,
   KeyboardSensor,
   MouseSensor,
   useSensor,
   useSensors,
   type DragEndEvent,
+  type DragStartEvent,
   type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { ErrorState } from "@/components/ui/ErrorState";
@@ -24,6 +26,7 @@ import {
 } from "../dnd";
 import { usePipelineMove } from "../usePipelineMove";
 import { Column } from "./Column";
+import { PipelineCardPreview } from "./PipelineCardPreview";
 import { PipelineSkeleton } from "./PipelineSkeleton";
 
 /** The /pipeline screen below the h1: loading, error, or three columns. */
@@ -33,6 +36,8 @@ export function Board() {
   const move = usePipelineMove();
   // The card whose Move button gets focus after a menu move or keyboard drop lands it in its new column.
   const [focusId, setFocusId] = useState<string | null>(null);
+  // The card being dragged, for the preview that follows the pointer.
+  const [draggingId, setDraggingId] = useState<UniqueIdentifier | null>(null);
 
   // Mouse and keyboard only. No touch sensor, so on a phone a swipe always scrolls the board.
   // The 8px distance lets a click on the name or the Move button stay a click.
@@ -69,7 +74,14 @@ export function Board() {
     move(contact, to);
   }
 
+  function handleDragStart({ active }: DragStartEvent) {
+    // Forget the last focus target, or a mouse drag of that card would pull focus to it.
+    setFocusId(null);
+    setDraggingId(active.id);
+  }
+
   function handleDragEnd({ active, over, activatorEvent }: DragEndEvent) {
+    setDraggingId(null);
     const contact = findContact(active.id);
     const to = statusFromDroppable(over?.id);
     if (!contact || !to || to === contact.status) return;
@@ -82,6 +94,7 @@ export function Board() {
   const columns = groupByStatus(contacts);
   // One clock per render, so every card agrees on "now".
   const now = new Date();
+  const dragging = draggingId === null ? undefined : findContact(draggingId);
 
   return (
     <DndContext
@@ -90,12 +103,13 @@ export function Board() {
       sensors={sensors}
       collisionDetection={columnCollision}
       accessibility={{ announcements: buildAnnouncements(findContact), screenReaderInstructions }}
-      // Forget the last focus target, or a mouse drag of that card would pull focus to it.
-      onDragStart={() => setFocusId(null)}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={() => setDraggingId(null)}
     >
-      {/* Phones: one row that scrolls sideways and snaps to a column. 768px up: a three-column grid. */}
-      <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:snap-none md:grid-cols-3 md:overflow-visible md:px-0">
+      {/* Phones: one row that scrolls sideways and snaps to a column. 768px up: a three-column grid
+          that fills the rest of the screen, one row tall, and each column scrolls on its own. */}
+      <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:min-h-0 md:flex-1 md:snap-none md:grid-cols-3 md:grid-rows-1 md:overflow-visible md:px-0 md:pb-0">
         {CONTACT_STATUSES.map((status) => (
           <Column
             key={status}
@@ -107,6 +121,10 @@ export function Board() {
           />
         ))}
       </div>
+      {/* No drop animation: it would fly the preview back to the old column before the card moves. */}
+      <DragOverlay dropAnimation={null}>
+        {dragging && <PipelineCardPreview contact={dragging} now={now} />}
+      </DragOverlay>
     </DndContext>
   );
 }
