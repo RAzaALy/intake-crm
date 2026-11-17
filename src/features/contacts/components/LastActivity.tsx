@@ -1,4 +1,4 @@
-import { formatExactTime, formatRelativeTime } from "@/lib/format";
+import { RelativeTime } from "@/components/ui/RelativeTime";
 import type { Contact } from "../schema";
 import { getStaleDays } from "../stale";
 
@@ -8,18 +8,12 @@ type LastActivityProps = {
   now: Date;
 };
 
-/** "3 days ago", with the exact time on hover, and the call-back hint for quiet leads. */
+/** "3 days ago" with the exact time for hover and screen readers, and the call-back hint for quiet leads. */
 export function LastActivity({ contact, now }: LastActivityProps) {
   const staleDays = getStaleDays(contact, now);
   return (
     <span className="flex flex-col">
-      <time
-        dateTime={contact.lastActivityAt}
-        title={formatExactTime(contact.lastActivityAt)}
-        className="tabular-nums"
-      >
-        {formatRelativeTime(contact.lastActivityAt, now)}
-      </time>
+      <RelativeTime iso={contact.lastActivityAt} now={now} />
       {staleDays !== null && (
         <span className="text-meta text-accent">No contact in {staleDays} days</span>
       )}

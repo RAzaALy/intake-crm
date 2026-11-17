@@ -41,10 +41,8 @@ export function ContactCard({ contact, now }: ContactCardProps) {
       </p>
 
       <div className="flex items-end justify-between gap-3 text-secondary text-ink-muted">
-        <span>
-          <span className="sr-only">Conflict check: </span>
-          <ConflictBadge check={contact.conflictCheck} />
-        </span>
+        {/* The badge text already says "Conflict ...", so it needs no hidden label. */}
+        <ConflictBadge check={contact.conflictCheck} />
         <span className="text-right">
           <span className="sr-only">Last activity: </span>
           <LastActivity contact={contact} now={now} />

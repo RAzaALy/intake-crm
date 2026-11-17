@@ -26,7 +26,7 @@ export function StatusMenu({ contact }: { contact: Contact }) {
       {
         onSuccess: () => {
           if (status === "active" && contact.conflictCheck === "flagged") {
-            toast(`${contact.fullName} moved to Active. Conflict check is still flagged.`);
+            toast.warning(`${contact.fullName} moved to Active. Conflict check is still flagged.`);
           } else {
             toast(`${contact.fullName} moved to ${STATUS_LABELS[status]}.`);
           }
