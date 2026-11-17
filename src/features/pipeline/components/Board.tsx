@@ -13,6 +13,7 @@ import {
   type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { ErrorState } from "@/components/ui/ErrorState";
+import { StaleDataNotice } from "@/components/ui/StaleDataNotice";
 import { useContacts } from "@/features/contacts/api/queries";
 import { CONTACT_STATUSES, type Contact, type ContactStatus } from "@/features/contacts/schema";
 import { useFailureSimulated } from "@/lib/useFailureSimulated";
@@ -31,7 +32,7 @@ import { PipelineSkeleton } from "./PipelineSkeleton";
 
 /** The /pipeline screen below the h1: loading, error, or three columns. */
 export function Board() {
-  const { data: contacts, isPending, isFetching, refetch } = useContacts();
+  const { data: contacts, isPending, isError, isFetching, refetch } = useContacts();
   const failureSimulated = useFailureSimulated();
   const move = usePipelineMove();
   // The card whose Move button gets focus after a menu move or keyboard drop lands it in its new column.
@@ -48,8 +49,8 @@ export function Board() {
 
   if (isPending) return <PipelineSkeleton />;
 
-  // Only when there is nothing to show. After a failed move the refetch fails too, but TanStack
-  // keeps the last good list, so the board stays up and the toast reports the failure.
+  // Full error page only when there is nothing to show. A failed reload (the demo switch, or the
+  // refetch after a failed move) keeps the last good board and shows StaleDataNotice above it.
   if (!contacts) {
     return (
       <ErrorState
@@ -107,6 +108,15 @@ export function Board() {
       onDragEnd={handleDragEnd}
       onDragCancel={() => setDraggingId(null)}
     >
+      {isError && (
+        <div className="mb-4">
+          <StaleDataNotice
+            failureSimulated={failureSimulated}
+            onRetry={() => void refetch()}
+            retrying={isFetching}
+          />
+        </div>
+      )}
       {/* Phones: one row that scrolls sideways and snaps to a column. 768px up: a three-column grid
           that fills the rest of the screen, one row tall, and each column scrolls on its own. */}
       <div className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:min-h-0 md:flex-1 md:snap-none md:grid-cols-3 md:grid-rows-1 md:overflow-visible md:px-0 md:pb-0">

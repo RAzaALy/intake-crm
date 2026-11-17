@@ -71,13 +71,15 @@ function renderBoard() {
       <Board />
     </QueryClientProvider>,
   );
+  return client;
 }
 
 async function openBoard() {
   seedStorage();
-  renderBoard();
+  const client = renderBoard();
   await finishRequests();
   await screen.findByRole("heading", { name: "Lead, 2 contacts" });
+  return client;
 }
 
 /** The column whose heading starts with the given label, e.g. "Lead". */
@@ -183,6 +185,7 @@ describe("when a move fails", () => {
     );
     // The refetch after the failure fails too, but the last good data stays on screen.
     expect(screen.queryByText("Pipeline didn't load")).not.toBeInTheDocument();
+    expect(await screen.findByText("Couldn't refresh.")).toBeInTheDocument();
   });
 
   it("puts back only the card whose save failed", async () => {
@@ -272,6 +275,17 @@ describe("board states", () => {
 
     expect(await screen.findByText("Pipeline didn't load")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+  });
+
+  it("keeps the board and shows a notice when a reload fails", async () => {
+    const client = await openBoard();
+    setFailureSimulated(true);
+    void client.invalidateQueries();
+    await finishRequests();
+
+    expect(await screen.findByText("Couldn't refresh.")).toBeInTheDocument();
+    expect(column("Lead").getByText("Ana Silva")).toBeInTheDocument();
+    expect(screen.queryByText("Pipeline didn't load")).not.toBeInTheDocument();
   });
 
   it("explains an empty column", async () => {

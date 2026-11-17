@@ -81,6 +81,16 @@ describe("ContactList states", () => {
     expect(refetch).toHaveBeenCalledTimes(1);
   });
 
+  it("keeps the rows and shows a notice when a reload fails", async () => {
+    queryState = { data: [makeContact({ fullName: "Ana Silva" })], isPending: false, isError: true, isFetching: false, refetch };
+    render(<ContactList />);
+
+    expect(screen.getByText("Couldn't refresh.")).toBeInTheDocument();
+    expect(screen.queryByText("Contacts didn't load")).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Try again" }));
+    expect(refetch).toHaveBeenCalledTimes(1);
+  });
+
   it("announces loading while pending", () => {
     queryState = { data: undefined, isPending: true, isError: false, isFetching: true, refetch };
     render(<ContactList />);

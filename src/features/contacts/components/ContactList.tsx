@@ -5,6 +5,7 @@ import Link from "next/link";
 import { buttonStyles } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorState } from "@/components/ui/ErrorState";
+import { StaleDataNotice } from "@/components/ui/StaleDataNotice";
 import { useFailureSimulated } from "@/lib/useFailureSimulated";
 import { useContacts } from "../api/queries";
 import { applyListParams } from "../filters";
@@ -29,7 +30,9 @@ export function ContactList() {
 
   if (isPending) return <ContactListSkeleton />;
 
-  if (isError) {
+  // Full error page only when there is nothing to show. A failed reload keeps the last good
+  // list on screen and shows StaleDataNotice above it instead.
+  if (!contacts) {
     return (
       <ErrorState
         title="Contacts didn't load"
@@ -67,6 +70,13 @@ export function ContactList() {
   return (
     // min-h-0 (here and on the table wrapper): fit the rows, but never grow past the screen.
     <div className="flex flex-col gap-4 md:min-h-0">
+      {isError && (
+        <StaleDataNotice
+          failureSimulated={failureSimulated}
+          onRetry={() => void refetch()}
+          retrying={isFetching}
+        />
+      )}
       <ListToolbar
         params={params}
         counts={result.counts}
