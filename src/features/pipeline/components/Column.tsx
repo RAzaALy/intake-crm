@@ -50,8 +50,9 @@ export function Column({ status, contacts, now, onMove, focusId }: ColumnProps) 
       {contacts.length === 0 ? (
         <div className="flex flex-col gap-1 rounded-panel border border-dashed border-line-input p-4 text-body">
           <p className="text-ink">{EMPTY_TEXT[status]}</p>
-          {/* TODO(copy): phones cannot drag, so this hint needs a phone variant. Raza to word it. */}
-          <p className="text-ink-muted">Drag a card here, or use Move on any card.</p>
+          {/* Phones cannot drag (touch scrolls the board), so they only get the Move route. */}
+          <p className="hidden text-ink-muted md:block">Drag a card here, or use Move on any card.</p>
+          <p className="text-ink-muted md:hidden">Use Move on any card to bring it here.</p>
         </div>
       ) : (
         <ul className="flex flex-col gap-2">

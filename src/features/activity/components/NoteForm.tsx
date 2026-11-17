@@ -68,7 +68,13 @@ export function NoteForm({ onAdd, adding }: NoteFormProps) {
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-2">
-      <Field label="Add a note" hint="Ctrl+Enter or Cmd+Enter to add" error={errors.body?.message}>
+      <Field
+        label="Add a note"
+        hint="Ctrl+Enter or Cmd+Enter to add"
+        // Phones have no Ctrl or Cmd key.
+        hintClassName="hidden md:block"
+        error={errors.body?.message}
+      >
         {(fieldProps) => (
           <Textarea
             {...fieldProps}

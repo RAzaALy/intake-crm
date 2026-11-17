@@ -1,4 +1,5 @@
 import { useId, type ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
 /** Props Field hands to its control so label, hint and error are wired for screen readers. */
 export type FieldControlProps = {
@@ -10,13 +11,15 @@ export type FieldControlProps = {
 type FieldProps = {
   label: string;
   hint?: string;
+  /** For hints that only apply on some screens, such as keyboard shortcuts. */
+  hintClassName?: string;
   error?: string;
   /** Shows "(optional)" after the label. Required fields are not starred. */
   optional?: boolean;
   children: (control: FieldControlProps) => ReactNode;
 };
 
-export function Field({ label, hint, error, optional = false, children }: FieldProps) {
+export function Field({ label, hint, hintClassName, error, optional = false, children }: FieldProps) {
   const id = useId();
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
@@ -41,7 +44,7 @@ export function Field({ label, hint, error, optional = false, children }: FieldP
         </p>
       )}
       {hint && (
-        <p id={hintId} className="text-meta text-ink-muted">
+        <p id={hintId} className={cn("text-meta text-ink-muted", hintClassName)}>
           {hint}
         </p>
       )}
